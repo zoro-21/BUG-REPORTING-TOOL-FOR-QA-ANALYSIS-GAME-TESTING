@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Bug Reporting Tool</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h1>Bug Reporting Tool</h1>
+    <form action="{{ url_for('add_bug') }}" method="post" class="bug-form">
+      <input name="title" placeholder="Title" required>
+      <textarea name="description" placeholder="Description" required></textarea>
+      <select name="severity">
+        <option>Low</option>
+        <option>Medium</option>
+        <option>High</option>
+      </select>
+      <select name="status">
+        <option>Open</option>
+        <option>In Progress</option>
+        <option>Closed</option>
+      </select>
+      <button type="submit">Add Bug</button>
+    </form>
+
+    <h2>Reported Bugs</h2>
+    <div class="bug-list">
+      {% for b in bugs %}
+        <div class="bug">
+          <h3>{{ b['title'] }} <small>({{ b['severity'] }})</small></h3>
+          <p>{{ b['description'] }}</p>
+          <p><strong>Status:</strong> {{ b['status'] }}</p>
+          <form action="{{ url_for('delete_bug', bug_id=b['id']) }}" method="post" onsubmit="return confirm('Delete this bug?')">
+            <button type="submit">Delete</button>
+          </form>
+        </div>
+      {% else %}
+        <p>No bugs reported yet.</p>
+      {% endfor %}
+    </div>
+  </div>
+</body>
+</html>
